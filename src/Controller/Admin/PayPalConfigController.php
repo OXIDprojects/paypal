@@ -391,23 +391,18 @@ class PayPalConfigController extends AdminController
     {
         $config = new Config();
 
-        $onboardingFile = $config->getOnboardingBlockCacheFileName();
-        if (file_exists($onboardingFile) === false) {
-            $request = Registry::getRequest();
+        $request = Registry::getRequest();
 
-            if ($merchantId = (string)$request->getRequestParameter('merchantIdInPayPal')) {
-                /** @var ModuleSettings $moduleSettings */
-                $moduleSettings = $this->getServiceFromContainer(ModuleSettings::class);
-                $isSandbox = (string)$request->getRequestParameter('isSandbox');
-                $isSandbox = $isSandbox === '1';
-                $moduleSettings->saveMerchantId($merchantId, $isSandbox);
-            }
-
-            $this->autoConfiguration();
-            $this->registerWebhooks();
-        } else {
-            unlink($onboardingFile);
+        if ($merchantId = (string)$request->getRequestParameter('merchantIdInPayPal')) {
+            /** @var ModuleSettings $moduleSettings */
+            $moduleSettings = $this->getServiceFromContainer(ModuleSettings::class);
+            $isSandbox = (string)$request->getRequestParameter('isSandbox');
+            $isSandbox = $isSandbox === '1';
+            $moduleSettings->saveMerchantId($merchantId, $isSandbox);
         }
+
+        $this->autoConfiguration();
+        $this->registerWebhooks();
 
         $url = $config->getAdminUrlForJSCalls() . 'cl=oscpaypalconfig';
 
