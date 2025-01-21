@@ -398,18 +398,6 @@ class Config
     }
 
     /**
-     * Get the full file name of the onboarding block cache file
-     * It is needed because the PayPal Javascript sends 2 identical requests to the shop at the same time to trigger
-     * "returnFromSignup" which creates a race-condition which interferes with changing the module config correctly.
-     *
-     * @return string
-     */
-    public function getOnboardingBlockCacheFileName(): string
-    {
-        return $this->getCacheDir() . 'paypalonboarding_' . Registry::getConfig()->getActiveShop()->getId() . '.txt';
-    }
-
-    /**
      * Get a Admin URL with all necessary Admin-params
      *
      * @return string

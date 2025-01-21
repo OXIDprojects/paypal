@@ -31,16 +31,20 @@ class Onboarding
     {
         $credentials = [];
         try {
+            $paypalConfig = oxNew(PayPalConfig::class);
+
             //fetch and save credentials
             $credentials = $this->fetchCredentials();
             $this->saveCredentials($credentials);
+
+            // remove the old token from onboarding, because this was generated with community-credentials
+            // now we use the new credentials and a new token is necessary
+            unlink($paypalConfig->getTokenCacheFileName());
 
             // fetch and save Eligibility
             $merchantInformations = $this->fetchMerchantInformations();
             $this->saveEligibility($merchantInformations);
 
-            $paypalConfig = oxNew(PayPalConfig::class);
-            file_put_contents($paypalConfig->getOnboardingBlockCacheFileName(), "1");
         } catch (\Exception $exception) {
             throw OnboardingException::autoConfiguration($exception->getMessage());
         }
@@ -226,7 +230,6 @@ class Onboarding
         $isAcdcEligibility = false;
         $isVaultingEligibility = false;
         $isVaultingCapability = false;
-        $isGooglePayCapability = false;
         $isApplePayEligibility = false;
         $isGooglePayCapability = false;
 
