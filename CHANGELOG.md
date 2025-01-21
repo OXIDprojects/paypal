@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007695](https://bugs.oxid-esales.com/view.php?id=7695): Fix: if DeliverySet is set in Frontend, then do not add any PseudoDeliveryCosts for PPExpress
 - add possibility to ignore cached tokens. It helps e.g. for webhook registration
 - [0007695](https://bugs.oxid-esales.com/view.php?id=7695): Explain better Pseudo delivery costs
+- fix issue with provided english translations for admin 
 
 ### NEW
 - PayPal-Request-Id based on serialized body, no extra PayPal-Request-Id necessary anymore

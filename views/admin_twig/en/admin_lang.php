@@ -1,3 +1,3 @@
 <?php
 
-include __DIR__."/../../en/admin_translations.php";
+include __DIR__ . "/../../admin_en/admin_translations.php";
