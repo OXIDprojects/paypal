@@ -67,7 +67,7 @@ class ServiceFactory
     {
         return oxNew(
             GenericService::class,
-            $this->getClient(false),
+            $this->getClient(),
             '/v1/notifications/webhooks' . $uri
         );
     }
@@ -111,7 +111,7 @@ class ServiceFactory
      *
      * @return Client
      */
-    private function getClient(bool $useToken = true): Client
+    private function getClient(): Client
     {
         if ($this->client === null) {
             /** @var Config $config */
@@ -123,7 +123,7 @@ class ServiceFactory
             $basketId = $session->getVariable('sess_challenge');
             $paymentId = $session->getVariable('paymentid');
             $actionHash = md5($sessionId . $basketId . $paymentId);
-            $sTokenCacheFileName = $useToken ? $config->getTokenCacheFileName() : '';
+            $sTokenCacheFileName = $config->getTokenCacheFileName();
 
             $client = new Client(
                 $logger,
