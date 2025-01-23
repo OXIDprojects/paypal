@@ -390,6 +390,7 @@ class ModuleSettings
             $this->isSandboxGooglePayEligibility() :
             $this->isLiveGooglePayEligibility();
     }
+
     public function isSandboxAcdcEligibility(): bool
     {
         return (bool)$this->getSettingValue('oscPayPalSandboxAcdcEligibility');
@@ -706,7 +707,7 @@ class ModuleSettings
 
     public function getIsVaultingActive(): bool
     {
-        return (bool)$this->getSettingValue('oscPayPalSetVaulting');
+        return (bool)$this->getSettingValue('oscPayPalSetVaulting') && $this->isVaultingEligibility();
     }
 
     public function getIsGooglePayDeliveryAddressActive(): bool
