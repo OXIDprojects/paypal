@@ -1,10 +1,10 @@
 {% extends "page/checkout/payment.html.twig" %}
 
 {% block select_payment %}
+    {% set config = oViewConf.getPayPalCheckoutConfig() %}
     {% if sPaymentID == "oscpaypal_express" %}
         {% include "@osc_paypal/frontend/select_payment.html.twig" %}
     {% elseif sPaymentID == "oscpaypal_sepa" or sPaymentID == "oscpaypal_cc_alternative" %}
-        {% set config = oViewConf.getPayPalCheckoutConfig() %}
         {% if config.isActive() and not oViewConf.isPayPalExpressSessionActive() %}
             <div class="payment-option">
                 <div class="payment-option-form">
@@ -49,24 +49,17 @@
                 {% endif %}
             </div>
         {% endif %}
+    {% elseif sPaymentID == "oscpaypal_googlepay" %}
+        {% if config.isActive() and not oViewConf.isPayPalExpressSessionActive() %}
+            {{ parent() }}
+        {% endif %}
+    {% elseif sPaymentID == "oscpaypal_applepay" %}
+        {% if config.isActive() and not oViewConf.isPayPalExpressSessionActive() %}
+            {{ parent() }}
+            {% include "@osc_paypal/frontend/apple_pay.html.twig" with {sPaymentID: sPaymentID} %}
+        {% endif %}
     {% else %}
         {{ parent() }}
-        {% if sPaymentID == "oscpaypal_applepay" %}
-            {% capture assign = "applePayAvailabilityCheck" %}
-                document.addEventListener('DOMContentLoaded', function() {
-                    if(!window.ApplePaySession || !ApplePaySession.canMakePayments()) {
-                        const paymentInput = document.querySelector(`[name="paymentid"][value="{{ sPaymentID }}"]`);
-                        if (paymentInput) {
-                            const paymentOption = paymentInput.closest('.payment-option');
-                            if (paymentOption) {
-                                paymentOption.remove();
-                            }
-                        }
-                    }
-                });
-            {% endcapture %}
-            {{ script({ add: applePayAvailabilityCheck, dynamic: __oxid_include_dynamic }) }}
-        {% endif %}
     {% endif %}
 {% endblock %}
 
