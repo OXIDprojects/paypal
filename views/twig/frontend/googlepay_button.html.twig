@@ -2,12 +2,11 @@
     {% set sToken = oViewConf.getSessionChallengeToken() %}
     {% set sSelfLink = oViewConf.getSslSelfLink()|replace({'&amp;': '&'})|raw %}
     {% set oPPconfig = oViewConf.getPayPalCheckoutConfig() %}
-    {% set oConfig = oViewConf.getConfig() %}
     {% set buttonId = oView.getPayment().getId() %}
-    <div class="google-pay-loading-container">
+    <div class="google-pay-loading-container paypal-button-wrapper paypal-button-right">
         <img src="{{ oViewConf.getModuleUrl('osc_paypal') }}img/loading.svg" width="24" height="24" alt="loading animation"/>
     </div>
-    <div id="{{paymentId}}"
+    <div id="google_pay_button_data_container"
          class="paypal-button-container paypal-button-wrapper large"
          data-button-id="{{ buttonId }}"
          data-token="{{ sToken }}"
@@ -27,4 +26,5 @@
         });
     </script>
     <script async src="https://pay.google.com/gp/p/js/pay.js" onload="window.onGooglePayLoaded()"></script>
+    <div id="{{paymentId}}" class="paypal-button-container paypal-button-wrapper paypal-button-right large"></div>
 {% endhasrights %}
