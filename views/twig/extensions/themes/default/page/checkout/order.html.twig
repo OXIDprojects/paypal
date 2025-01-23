@@ -69,9 +69,21 @@
         {% include "@osc_paypal/frontend/applepay_button.html.twig" with {paymentId: payment.getId()} %}
     {% else %}
         {# usual order button #}
-        <button type="button" class="btn btn-highlight btn-lg w-100"
-                onclick="document.getElementById('orderConfirmAgbBottom').submit();">
+        <button id="orderSubmitButton" type="button" class="btn btn-highlight btn-lg w-100">
             {{ translate({ ident: "SUBMIT_ORDER" }) }}
         </button>
+
+        {% capture assign = "oscpaypal_madClickPrevention" %}
+            const submitButton = document.getElementById('orderSubmitButton');
+            const orderConfirmAgbBottom = document.getElementById('orderConfirmAgbBottom');
+
+            submitButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            this.disabled = true;
+            orderConfirmAgbBottom.submit();
+            });
+        {% endcapture %}
+        {{ script({ add: oscpaypal_madClickPrevention, dynamic: __oxid_include_dynamic }) }}
+
     {% endif %}
 {% endblock %}
