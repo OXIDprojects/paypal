@@ -562,8 +562,7 @@ class OrderController extends OrderController_parent
         $paypalOrderId = (string) Registry::getRequest()->getRequestParameter('token');
         $forceFetchDetails = (bool) Registry::getRequest()->getRequestParameter('fallbackfinalize');
 
-        $oxidOrderId = Registry::getSession()->getBasket()->getOrderId();
-        $oxidOrderId = $oxidOrderId ?: Registry::getSession()->getVariable('sess_challenge');
+        $oxidOrderId = Registry::getSession()->getVariable('sess_challenge');
 
         /** @var GooglePayPayPalService $googlePayPayPalService */
         $googlePayPayPalService = $this->getServiceFromContainer(GooglePayPayPalService::class);
