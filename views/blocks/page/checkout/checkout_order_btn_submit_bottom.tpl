@@ -28,7 +28,7 @@
     [{else}]
     [{include file="modules/osc/paypal/applepay.tpl" paymentId=$payment->getId() buttonClass="paypal-button-wrapper large"}]
     [{/if}]
-    <div id="applepay-container" class="paypal-button-container paypal-button-wrapper large"></div>
+    <div id="applepay-container" class="paypal-button-container paypal-button-wrapper paypal-button-right large"></div>
 [{else}]
     [{$smarty.block.parent}]
 [{/if}]

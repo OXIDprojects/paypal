@@ -28,7 +28,7 @@
             });
         </script>
         <script async src="https://pay.google.com/gp/p/js/pay.js" onload="window.onGooglePayLoaded()"></script>
-        <div id="[{$payment->getId()}]" class="paypal-button-container paypal-button-wrapper large"></div>
+        <div id="[{$payment->getId()}]" class="paypal-button-container paypal-button-wrapper paypal-button-right large"></div>
     [{/oxhasrights}]
 [{/block}]
 
