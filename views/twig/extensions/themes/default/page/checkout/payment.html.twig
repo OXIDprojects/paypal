@@ -51,6 +51,22 @@
         {% endif %}
     {% else %}
         {{ parent() }}
+        {% if sPaymentID == "oscpaypal_applepay" %}
+            {% capture assign = "applePayAvailabilityCheck" %}
+                document.addEventListener('DOMContentLoaded', function() {
+                    if(!window.ApplePaySession || !ApplePaySession.canMakePayments()) {
+                        const paymentInput = document.querySelector(`[name="paymentid"][value="{{ sPaymentID }}"]`);
+                        if (paymentInput) {
+                            const paymentOption = paymentInput.closest('.payment-option');
+                            if (paymentOption) {
+                                paymentOption.remove();
+                            }
+                        }
+                    }
+                });
+            {% endcapture %}
+            {{ script({ add: applePayAvailabilityCheck, dynamic: __oxid_include_dynamic }) }}
+        {% endif %}
     {% endif %}
 {% endblock %}
 
