@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007742](https://bugs.oxid-esales.com/view.php?id=7742): You get stuck in the checkout if the "Save payment method" option is activated for credit card payment
 - [0007695](https://bugs.oxid-esales.com/view.php?id=7695): Explain better Pseudo delivery costs
 - Show vaulted Payments filtered by payment-method in account-view
+- fix issue with googlePay (await for the complete execution)
 
 ### NEW
 

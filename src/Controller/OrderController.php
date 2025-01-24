@@ -245,7 +245,10 @@ class OrderController extends OrderController_parent
             $this->execute();
         } catch (Exception $exception) {
             $logger->log('error', $exception->getMessage(), [$exception]);
-            $this->outputJson(['googlepayerror' => 'failed to execute shop order']);
+            $this->outputJson([
+                'googlepayerror' => 'failed to execute shop order',
+                'status' => 'ERROR'
+            ]);
             return;
         }
 
@@ -253,6 +256,10 @@ class OrderController extends OrderController_parent
             Registry::getSession()->getBasket(),
             $orderId
         );
+
+        $this->outputJson([
+            'status' => 'SUCCESS'
+        ]);
     }
 
     public function captureGooglePayOrder(): void

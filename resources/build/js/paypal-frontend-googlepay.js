@@ -203,18 +203,24 @@ window.OxidPayPalGooglePay = {
         const url = this.selfLink + '&cl=order&fnc=executeGooglePayOrder&context=continue&stoken=' + this.token + '&sDeliveryAddressMD5=' + this.deliveryAddressMD5;
         createData = new FormData();
         createData.append('orderID', orderId);
-        fetch(url, {
-            method: 'POST',
-            body: createData
-        }).then(function (res) {
-            return res.json();
-        }).then(function (data) {
+        // With await we wait for the complete execution
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                body: createData
+            });
+            const data = await res.json();
             console.log("==== Create OXID Order Completed ====");
 
             if (data.status === "ERROR") {
                 location.reload();
             }
-        });
+
+            return data; // // Important: We return the result
+        } catch (error) {
+            console.error("Error in executeOxidOrder:", error);
+            throw error; // Forward the error so that the calling method can react
+        }
     },
     captureOrder: async function (orderId) {
         captureData = new FormData();
