@@ -3,8 +3,6 @@
 [{assign var="sToken" value=$oViewConf->getSessionChallengeToken()}]
 [{assign var="sSelfLink" value=$oViewConf->getSslSelfLink()|replace:"&amp;":"&"}]
 [{assign var="config" value=$oViewConf->getPayPalCheckoutConfig()}]
-[{assign var="oConfig" value=$oViewConf->getConfig()}]
-[{assign var="bApplePayDelivery" value=$oConfig->getConfigParam('oscPayPalUseApplePayAddress')}]
 <style>
     #applepay_button {
         float: right;
