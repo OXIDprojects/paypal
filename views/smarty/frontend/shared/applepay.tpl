@@ -3,8 +3,6 @@
         [{assign var="sToken" value=$oViewConf->getSessionChallengeToken()}]
         [{assign var="sSelfLink" value=$oViewConf->getSslSelfLink()|replace:"&amp;":"&"}]
         [{assign var="config" value=$oViewConf->getPayPalCheckoutConfig()}]
-        [{assign var="oConfig" value=$oViewConf->getConfig()}]
-        [{assign var="bApplePayDelivery" value=$oConfig->getConfigParam('oscPayPalUseApplePayAddress')}]
         <div id="applepay-container" class="paypal-button-container paypal-button-wrapper large"></div>
         [{capture name="detailsApplePayScript"}]
             [{if $phpstorm}]<script>[{/if}]

@@ -1,12 +1,10 @@
 {% block oscpaypal_applepay %}
     {% hasrights { ident: "PAYWITHAPPLEPAY" } %}
         {% set sToken = oViewConf.getSessionChallengeToken() %}
-        {% set sSelfLink = oViewConf.getSslSelfLink()|replace("&amp;", "&") %}
+        {% set sSelfLink = oViewConf.getSslSelfLink()|replace({"&amp;": "&"}) %}
         {% set config = oViewConf.getPayPalCheckoutConfig() %}
-        {% set oConfig = oViewConf.getConfig() %}
-        {% set bApplePayDelivery = oConfig.getConfigParam('oscPayPalUseApplePayAddress') %}
         <div id="applepay-container" class="paypal-button-container paypal-button-wrapper large"></div>
-        {% capture name = "detailsApplePayScript" %}
+        {% capture assign = "detailsApplePayScript" %}
             {% if phpstorm %}<script>{% endif %}
             let order_id;
             let global_apple_pay_config;
@@ -43,7 +41,7 @@
                 {% if config.isSandbox() %}
                 console.log('--- Start preloadPaymentRequestData ---');
                 {% endif %}
-                let url = "{{ sSelfLink ~ 'cl=oscpaypalproxy&fnc=getPaymentRequestLines&paymentid=' ~ paymentId ~ '&context=continue&stoken=' ~ sToken }}";
+                let url = "{{ (sSelfLink ~ 'cl=oscpaypalproxy&fnc=getPaymentRequestLines&paymentid=' ~ paymentId ~ '&context=continue&stoken=' ~ sToken)|raw }}";
                 {% if config.isSandbox() %}
                 console.log('Fetching payment request lines from URL:', url);
                 {% endif %}
@@ -95,7 +93,7 @@
             const display_success_message = (object) => {
                 console.log('--- display_success_message ---');
                 const { order_details, paypal_buttons } = object;
-                const intent_object = intent is same as("authorize" ? "authorizations" : "captures";)
+                const intent_object = intent === "authorize" ? "authorizations" : "captures";
 
                 document.getElementById("alert").innerHTML = `
                 <div class='ms-alert ms-action'>
@@ -157,9 +155,9 @@
                 {% endif %}
                 applepay_payment_event = event.payment;
                 let intent = 'captures';
-                let intent_object = intent is same as("authorize" ? "authorizations" : "captures";)
+                let intent_object = intent === "authorize" ? "authorizations" : "captures";
 
-                const createOrderUrl = "{{ sSelfLink ~ 'cl=oscpaypalproxy&fnc=createApplepayOrder&paymentid=' ~ paymentId ~ '&context=continue&stoken=' ~ sToken }}";
+                const createOrderUrl = "{{ (sSelfLink ~ 'cl=oscpaypalproxy&fnc=createApplepayOrder&paymentid=' ~ paymentId ~ '&context=continue&stoken=' ~ sToken)|raw }}";
                 {% if config.isSandbox() %}
                 console.log('Creating order with URL:', createOrderUrl);
                 {% endif %}
@@ -190,7 +188,7 @@
                         session.completePayment(session.STATUS_FAILURE);
                         return;
                     }
-                    const approve_order = "{{ sSelfLink ~ 'cl=oscpaypalproxy&fnc=approveOrder&paymentid=' ~ paymentId ~ '&context=continue&stoken=' ~ sToken }}";
+                    const approve_order = "{{ (sSelfLink ~ 'cl=oscpaypalproxy&fnc=approveOrder&paymentid=' ~ paymentId ~ '&context=continue&stoken=' ~ sToken)|raw }}";
                     const approve_response = await fetch(approve_order, {
                         method: "post",
                         headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -205,7 +203,7 @@
                     console.log('Order approval response:', order_details);
                     {% endif %}
 
-                    if (order_details.status is same as("APPROVED") {)
+                    if (order_details.status === "APPROVED") {
                         await onApprove(order_details);
                         await onCreated(order_details);
                     } else {
@@ -248,7 +246,7 @@
                 {% if config.isSandbox() %}
                 console.log('--- Start onApprove ---');
                 {% endif %}
-                const url = "{{ sSelfLink ~ 'cl=order&fnc=createApplePayOrder&context=continue&stoken=' ~ sToken ~ '&sDeliveryAddressMD5=' ~ oView.getDeliveryAddressMD5() }}";
+                const url = "{{ (sSelfLink ~ 'cl=order&fnc=createApplePayOrder&context=continue&stoken=' ~ sToken ~ '&sDeliveryAddressMD5=' ~ oView.getDeliveryAddressMD5())|raw }}";
                 {% if config.isSandbox() %}
                 console.log('Approving order with URL:', url);
                 {% endif %}
@@ -281,7 +279,7 @@
                 {% endif %}
                 const captureData = new FormData();
                 captureData.append('orderID', confirmOrderResponse.id);
-                return fetch("{{ sSelfLink ~ 'cl=order&fnc=captureApplePayOrder&context=continue&stoken=' ~ sToken '&sDeliveryAddressMD5=' ~ oView.getDeliveryAddressMD5() }}", {
+                return fetch("{{ (sSelfLink ~ 'cl=order&fnc=captureApplePayOrder&context=continue&stoken=' ~ sToken ~ '&sDeliveryAddressMD5=' ~ oView.getDeliveryAddressMD5())|raw }}", {
                     method: 'post',
                     body: captureData
                 }).then(function (res) {
@@ -329,6 +327,6 @@
             {% if phpstorm %}</script>{% endif %}
         {% endcapture %}
         {{ script({ include: "https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js", dynamic: __oxid_include_dynamic }) }}
-        {{ script({ add: smarty.capture.detailsApplePayScript, dynamic: __oxid_include_dynamic }) }}
+        {{ script({ add: detailsApplePayScript, dynamic: __oxid_include_dynamic }) }}
     {% endhasrights %}
 {% endblock %}

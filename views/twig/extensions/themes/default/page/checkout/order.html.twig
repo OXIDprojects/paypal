@@ -64,7 +64,7 @@
     {% if paymentId == "oscpaypal_googlepay" %}
         {# google pay has a specific button #}
         {% include "@osc_paypal/frontend/googlepay_button.html.twig" %}
-    {% elseif paymentId == "oscpaypal_apple_pay"%}
+    {% elseif paymentId == "oscpaypal_applepay"%}
         {# apple pay has a specific button #}
         {% include "@osc_paypal/frontend/applepay_button.html.twig" with {paymentId: payment.getId()} %}
     {% else %}

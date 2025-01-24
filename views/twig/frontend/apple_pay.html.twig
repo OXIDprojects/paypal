@@ -14,7 +14,7 @@
             console.error(error_message);
             const applePayInput = document.getElementById('payment_{{ sPaymentID }}');
             if (applePayInput) {
-                applePayInput.closest('.well.well-sm').remove(); // Remove the outer div if Apple Pay is not supported
+                applePayInput.closest('.payment-option').remove(); // Remove the outer div if Apple Pay is not supported
             }
             throw new Error(error_message);
         }
