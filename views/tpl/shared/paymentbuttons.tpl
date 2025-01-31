@@ -58,7 +58,9 @@
                     button.render('#[{$buttonId}]')
                 } else {
                     //remove SEPA option from payments methods
-                    $('.paypal-button-wrapper--sepa').parents('dl').remove();
+                    document.querySelector('.paypal-button-wrapper--sepa')
+                        .closest('dl')
+                        .remove();
                 }
             });
         [{else}]
