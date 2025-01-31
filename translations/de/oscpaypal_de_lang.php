@@ -49,7 +49,7 @@ $aLang = [
     'OSC_PAYPAL_ORDEREXECUTION_ERROR'               => 'Der Bezahlvorgang wurde abgebrochen.',
 
     'OSC_PAYPAL_VAULTING_MENU'                      => 'PayPal Zahlart speichern',
-    'OSC_PAYPAL_VAULTING_MENU_CARD'                 => 'PayPal Kreditkarte speichern',
+    'OSC_PAYPAL_VAULTING_MENU_CARD'                 => 'Kredit- oder Debitkarte speichern',
     'OSC_PAYPAL_VAULTING_CARD_SAVE'                 => 'Karte speichern',
     'OSC_PAYPAL_VAULTING_SAVE_INSTRUCTION'          => 'Speichern Sie hier Ihre PayPal Zahlungsmethode für einen schnelleren Checkout.',
     'OSC_PAYPAL_VAULTING_SAVE_INSTRUCTION_CARD'     => 'Speichern Sie hier Ihre Karte für einen schnelleren Checkout.',
