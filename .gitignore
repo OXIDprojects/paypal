@@ -12,3 +12,4 @@ php-cs-fixer.phar
 /tests/report
 /resources/node_modules/
 /resources/build/js/typescript-transpiled
+*:Zone.Identifier
