@@ -21,7 +21,7 @@
                                 </div>
                             {% endfor %}
 
-                            {% include "@osc_paypal/frontend/paymentbuttons.html.twig" with {buttonId: sPaymentID, buttonClass: "paypal-button-wrapper large"} %}
+                            {% include "@osc_paypal/frontend/paymentbuttons.html.twig" with {buttonId: sPaymentID, buttonClass: "paypal-button-wrapper paypal-button-wrapper-" ~ sPaymentID ~ " large"} %}
 
                             {% block checkout_payment_longdesc %}
                                 {% if paymentmethod.oxpayments__oxlongdesc.value|striptags|trim %}

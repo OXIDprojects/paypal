@@ -54,8 +54,14 @@
                 })
                 // Check if the button is eligible
                 if (button.isEligible()) {
-                // Render the standalone button for that funding source
+                    // Render the standalone button for that funding source
                     button.render('#[{$buttonId}]')
+                }
+                else {
+                    //remove SEPA option from payments methods
+                    document.querySelector('.paypal-button-wrapper--sepa')
+                        .closest('dl')
+                        .remove();
                 }
             });
         [{else}]
