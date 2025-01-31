@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007695](https://bugs.oxid-esales.com/view.php?id=7695): Explain better Pseudo delivery costs
 - Show vaulted Payments filtered by payment-method in account-view
 - fix issue with googlePay (await for the complete execution)
+- fix Remove SEPA payment method of it is not eligible, temporary solution
 
 ### NEW
 
