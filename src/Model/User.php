@@ -29,7 +29,7 @@ class User extends User_parent
     /**
      * @inheritDoc
      */
-    public function onOrderExecute($basket, $success): void
+    public function onOrderExecute($basket, $success)
     {
         // we manipulate the $success only for this parent onOrderExecute
         // to add the customers to the correct usergroup
