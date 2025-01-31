@@ -45,7 +45,7 @@ $aLang = [
     'OSCPAYPAL_KILL_EXPRESS_SESSION_REASON'         => 'Der Warenkorb wurde geändert. Aus diesem Grund wurde der aktive PayPal-Zahlvorgang automatisch abgebrochen. Bitte starten Sie die Zahlung mit PayPal erneut. Es wurde noch kein Geld von PayPal eingezogen.',
 
     'OSC_PAYPAL_VAULTING_MENU'                      => 'PayPal Zahlart speichern',
-    'OSC_PAYPAL_VAULTING_MENU_CARD'                 => 'PayPal Kreditkarte speichern',
+    'OSC_PAYPAL_VAULTING_MENU_CARD'                 => 'Kredit- oder Debitkarte speichern',
     'OSC_PAYPAL_VAULTING_CARD_SAVE'                 => 'Karte speichern',
     'OSC_PAYPAL_VAULTING_SAVE_INSTRUCTION'          => 'Speichern Sie hier Ihre PayPal Zahlungsmethode für einen schnelleren Checkout.',
     'OSC_PAYPAL_VAULTING_SAVE_INSTRUCTION_CARD'     => 'Speichern Sie hier Ihre Karte für einen schnelleren Checkout.',
