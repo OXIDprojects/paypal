@@ -29,7 +29,6 @@ class Onboarding
 
     public function autoConfigurationFromCallback(): array
     {
-        $credentials = [];
         try {
             $paypalConfig = oxNew(PayPalConfig::class);
 
