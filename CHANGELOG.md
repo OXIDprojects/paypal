@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - fix Remove SEPA payment method of it is not eligible, temporary solution
 - [0007760](https://bugs.oxid-esales.com/view.php?id=7760): Paypal return type and B2B Module
 - Change the onboarding process to "without return URL & return button"
+- [0007764](https://bugs.oxid-esales.com/view.php?id=7764): Fix TotalPrice for ApplePay
 
 ### NEW
 
