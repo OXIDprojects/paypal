@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Catch possible thrown Error by getting DataClientToken
 - [0007719](https://bugs.oxid-esales.com/view.php?id=7719): Tracking code also be stored in standard DB field for backwards compatibility
 - add possibility to ignore cached tokens. It helps e.g. for webhook registration
-- use PayPal-Client v2.0.17
+- use PayPal-Client v2.0.18
 - [0007744](https://bugs.oxid-esales.com/view.php?id=7744): When using vouchers shop jumps back to payment selection
 - [0007745](https://bugs.oxid-esales.com/view.php?id=7745): Paypal checkout jumps back to step 2 with an error when an discount in relation to item value is used
 - [0007742](https://bugs.oxid-esales.com/view.php?id=7742): You get stuck in the checkout if the "Save payment method" option is activated for credit card payment
@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - fix issue with googlePay (await for the complete execution)
 - fix Remove SEPA payment method of it is not eligible, temporary solution
 - [0007760](https://bugs.oxid-esales.com/view.php?id=7760): Paypal return type and B2B Module
+- Change the onboarding process to "without return URL & return button"
 
 ### NEW
 

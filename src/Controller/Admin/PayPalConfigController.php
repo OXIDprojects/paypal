@@ -7,6 +7,7 @@
 
 namespace OxidSolutionCatalysts\PayPal\Controller\Admin;
 
+use Exception;
 use GuzzleHttp\Exception\ClientException;
 use JsonException;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminController;
@@ -114,16 +115,11 @@ class PayPalConfigController extends AdminController
         $localeCode = $lang->getLanguageAbbr() . '-' . $countryCode;
 
         $partnerLogoUrl = Registry::getConfig()->getOutUrl(null, true) . 'admin/img/loginlogo.png';
-        $returnToPartnerUrl = $config->getAdminUrlForJSCalls() .
-            'cl=oscpaypalconfig&fnc=returnFromSignup' .
-            '&isSandbox=' . ($isSandbox ? '1' : '0')
-        ;
 
         $params = [
             'partnerClientId' => $partnerClientId,
             'partnerId' => $partnerId,
             'partnerLogoUrl' => $partnerLogoUrl,
-            'returnToPartnerUrl' => $returnToPartnerUrl,
             'product' => 'PPCP',
             'secondaryProducts' => 'advanced_vaulting,payment_methods',
             'capabilities' => 'GOOGLE_PAY,APPLE_PAY,PAY_UPON_INVOICE,PAYPAL_WALLET_VAULTING_ADVANCED',
@@ -374,38 +370,20 @@ class PayPalConfigController extends AdminController
     {
         try {
             $requestReader = oxNew(RequestReader::class);
-            PayPalSession::storeOnboardingPayload($requestReader->getRawPost());
-        } catch (\Exception $exception) {
+            $payload = $requestReader->getRawPost();
+            PayPalSession::storeOnboardingPayload($payload);
+        } catch (Exception $exception) {
             /** @var Logger $logger */
             $logger = $this->getServiceFromContainer(Logger::class);
             $logger->log('error', $exception->getMessage(), [$exception]);
         }
 
-        $result = [];
-        header('Content-Type: application/json; charset=UTF-8');
-        Registry::getUtils()->showMessageAndExit(json_encode($result, JSON_THROW_ON_ERROR));
-    }
-
-    public function returnFromSignup()
-    {
-        $config = new Config();
-
-        $request = Registry::getRequest();
-
-        if ($merchantId = (string)$request->getRequestParameter('merchantIdInPayPal')) {
-            /** @var ModuleSettings $moduleSettings */
-            $moduleSettings = $this->getServiceFromContainer(ModuleSettings::class);
-            $isSandbox = (string)$request->getRequestParameter('isSandbox');
-            $isSandbox = $isSandbox === '1';
-            $moduleSettings->saveMerchantId($merchantId, $isSandbox);
-        }
-
         $this->autoConfiguration();
         $this->registerWebhooks();
 
-        $url = $config->getAdminUrlForJSCalls() . 'cl=oscpaypalconfig';
-
-        Registry::getUtils()->redirect($url, false, 302);
+        $result = [];
+        header('Content-Type: application/json; charset=UTF-8');
+        Registry::getUtils()->showMessageAndExit(json_encode($result, JSON_THROW_ON_ERROR));
     }
 
     /**
@@ -419,7 +397,7 @@ class PayPalConfigController extends AdminController
             /** @var Onboarding $handler */
             $handler = oxNew(Onboarding::class);
             $credentials = $handler->autoConfigurationFromCallback();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             /** @var Logger $logger */
             $logger = $this->getServiceFromContainer(Logger::class);
             $logger->log('error', $exception->getMessage(), [$exception]);
@@ -440,7 +418,7 @@ class PayPalConfigController extends AdminController
             $webhookId = $handler->ensureWebhook();
         } catch (OnboardingException $exception) {
             Registry::getUtilsView()->addErrorToDisplay($exception->getMessage());
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             /** @var Logger $logger */
             $logger = $this->getServiceFromContainer(Logger::class);
             $logger->log('error', $exception->getMessage(), [$exception]);

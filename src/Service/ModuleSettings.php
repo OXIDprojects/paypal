@@ -484,22 +484,18 @@ class ModuleSettings
     /**
      * @throws ModuleSettingNotFountException
      */
-    public function saveMerchantId(string $merchantId, ?bool $isSandbox = null): void
+    public function saveMerchantId(string $merchantId): void
     {
-        $isSandbox = !is_null($isSandbox) ? $isSandbox : $this->isSandbox();
-
-        if ($isSandbox) {
+        if ($this->isSandbox()) {
             $this->save('oscPayPalSandboxClientMerchantId', $merchantId);
-        }
-
-        if (!$isSandbox) {
+        } else {
             $this->save('oscPayPalClientMerchantId', $merchantId);
         }
 
         $this->logger->log(
             'debug',
             sprintf(
-                'Saving Live  Merchant ID %s from onboarding',
+                'Saving Merchant ID %s from onboarding',
                 $merchantId
             )
         );

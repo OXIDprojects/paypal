@@ -92,9 +92,6 @@ final class AdminOnboardingCest extends BaseCest
         $I->waitForElement("//a[contains(@href, 'cl=oscpaypalonboarding')]", 20);
         $I->waitForElementClickable("//a[contains(@href, 'cl=oscpaypalonboarding')]");
         $href = $I->grabAttributeFrom("//a[contains(@href, 'cl=oscpaypalonboarding')]", 'href');
-        $I->assertStringContainsString('returnFromSignup', $href);
-        $I->amOnUrl($href);
-        $I->see('You can now close the window');
 
         //NOTE: in case of non ssl url, the webhook cannot be created, so webhook part depends on test environment
         //locally we will still see a note, that the module is inactive

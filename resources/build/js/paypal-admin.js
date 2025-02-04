@@ -44,7 +44,8 @@ function onboardedCallbackSandbox(authCode, sharedId)
 
 function callConfigControllerAutoConfigurationFromCallback(authCode, sharedId, isSandBox)
 {
-    fetch(window.selfLink + 'cl=oscpaypalconfig&fnc=autoConfigurationFromCallback', {
+    const sandboxSnippet = isSandBox ? '&XDEBUG_SESSION_START=1' : '';
+    fetch(window.selfLink + 'cl=oscpaypalconfig&fnc=autoConfigurationFromCallback' + sandboxSnippet, {
         method: 'POST',
         headers: {
             'content-type': 'application/json'
@@ -55,13 +56,13 @@ function callConfigControllerAutoConfigurationFromCallback(authCode, sharedId, i
             isSandBox: isSandBox
         })
     })
-        .then(
-            function (response) {
-                if (response.status !== 200) {
-                    return;
-                }
+    .then(
+        function (response) {
+            if (response.status === 200) {
+                window.location.reload();
             }
-        )
-        .catch(function (err) {
-        });
+        }
+    )
+    .catch(function (err) {
+    });
 }
