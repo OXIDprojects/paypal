@@ -13,6 +13,7 @@ use JsonException;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminController;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Exception\ModuleSettingNotFountException;
 use OxidSolutionCatalysts\PayPal\Service\Logger;
 use OxidSolutionCatalysts\PayPal\Core\Config;
 use OxidSolutionCatalysts\PayPal\Core\Constants as PayPalConstants;
@@ -115,17 +116,11 @@ class PayPalConfigController extends AdminController
         $localeCode = $lang->getLanguageAbbr() . '-' . $countryCode;
 
         $partnerLogoUrl = Registry::getConfig()->getOutUrl(null, true) . 'admin/img/loginlogo.png';
-/*
-        $returnToPartnerUrl = $config->getAdminUrlForJSCalls() .
-            'cl=oscpaypalconfig&fnc=returnFromSignup' .
-            '&isSandbox=' . ($isSandbox ? '1' : '0')
-        ;
-*/
+
         $params = [
             'partnerClientId' => $partnerClientId,
             'partnerId' => $partnerId,
             'partnerLogoUrl' => $partnerLogoUrl,
-//            'returnToPartnerUrl' => $returnToPartnerUrl,
             'product' => 'PPCP',
             'secondaryProducts' => 'advanced_vaulting,payment_methods',
             'capabilities' => 'GOOGLE_PAY,APPLE_PAY,PAY_UPON_INVOICE,PAYPAL_WALLET_VAULTING_ADVANCED',
@@ -390,28 +385,6 @@ class PayPalConfigController extends AdminController
         $result = [];
         header('Content-Type: application/json; charset=UTF-8');
         Registry::getUtils()->showMessageAndExit(json_encode($result, JSON_THROW_ON_ERROR));
-    }
-
-    public function returnFromSignup()
-    {
-        $config = new Config();
-
-        $request = Registry::getRequest();
-
-        if ($merchantId = (string)$request->getRequestParameter('merchantIdInPayPal')) {
-            /** @var ModuleSettings $moduleSettings */
-            $moduleSettings = $this->getServiceFromContainer(ModuleSettings::class);
-            $isSandbox = (string)$request->getRequestParameter('isSandbox');
-            $isSandbox = $isSandbox === '1';
-            $moduleSettings->saveMerchantId($merchantId, $isSandbox);
-        }
-
-        $this->autoConfiguration();
-        $this->registerWebhooks();
-
-        $url = $config->getAdminUrlForJSCalls() . 'cl=oscpaypalconfig';
-
-        Registry::getUtils()->redirect($url, false, 302);
     }
 
     /**

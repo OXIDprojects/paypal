@@ -66,10 +66,11 @@ class Onboarding
 
         $credentials = [];
         try {
-        $apiClient = $this->getOnboardingClient($onboardingResponse['isSandBox']);
-        $apiClient->authAfterWebLogin($onboardingResponse['authCode'], $onboardingResponse['sharedId'], $nonce);
+            $apiClient = $this->getOnboardingClient($onboardingResponse['isSandBox']);
+            $apiClient->authAfterWebLogin($onboardingResponse['authCode'], $onboardingResponse['sharedId'], $nonce);
 
             $credentials = $apiClient->getCredentials();
+
         } catch (ApiException $exception) {
             /**
              * @var Logger $logger
@@ -106,10 +107,10 @@ class Onboarding
     /**
      * @throws OnboardingException
      */
-    public function saveCredentials(array $credentials): array
+    public function saveCredentials(array $credentials): void
     {
         if (
-            !isset($credentials['client_id'], $credentials['client_secret'])
+            !isset($credentials['client_id'], $credentials['client_secret'], $credentials['payer_id'])
         ) {
             throw OnboardingException::mandatoryDataNotFound();
         }
@@ -117,11 +118,7 @@ class Onboarding
         $moduleSettings = $this->getServiceFromContainer(ModuleSettings::class);
         $moduleSettings->saveClientId($credentials['client_id']);
         $moduleSettings->saveClientSecret($credentials['client_secret']);
-
-        return [
-            'client_id' => $moduleSettings->getClientId(),
-            'client_secret' => $moduleSettings->getClientSecret()
-        ];
+        $moduleSettings->saveMerchantId($credentials['payer_id']);
     }
 
     /**
