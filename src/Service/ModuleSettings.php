@@ -389,19 +389,16 @@ class ModuleSettings
         }
     }
 
-    public function saveMerchantId($merchantId, $isSandbox = null)
+    public function saveMerchantId($merchantId)
     {
-        $logger = new PayPalLogger();
-        $isSandbox = !is_null($isSandbox) ? $isSandbox : $this->isSandbox();
-        if ($isSandbox) {
+        if ($this->isSandbox()) {
             $this->save('oscPayPalSandboxClientMerchantId', $merchantId);
-            $logger->info(sprintf('Saving Sandbox Merchant ID %s from onboarding', $merchantId));
+        } else {
+            $this->save('oscPayPalClientMerchantId', $merchantId);
         }
 
-        if (!$isSandbox) {
-            $this->save('oscPayPalClientMerchantId', $merchantId);
-            $logger->info(sprintf('Saving Live  Merchant ID %s from onboarding', $merchantId));
-        }
+        $logger = new PayPalLogger();
+        $logger->debug(sprintf('Saving Merchant ID %s from onboarding', $merchantId));
     }
 
     public function saveAcdcEligibility(bool $eligibility)

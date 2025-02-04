@@ -24,7 +24,6 @@ class Onboarding
 
     public function autoConfigurationFromCallback(): array
     {
-        $credentials = [];
         try {
             $paypalConfig = oxNew(PayPalConfig::class);
             //fetch and save credentials
@@ -90,23 +89,16 @@ class Onboarding
         $moduleSettings->saveSandboxMode($isSandbox);
     }
 
-    public function saveCredentials(array $credentials): array
+    public function saveCredentials(array $credentials)
     {
-        if (
-            !isset($credentials['client_id']) ||
-            !isset($credentials['client_secret'])
-        ) {
+        if (!isset($credentials['client_id'], $credentials['client_secret'], $credentials['payer_id'])) {
             throw OnboardingException::mandatoryDataNotFound();
         }
 
         $moduleSettings = $this->getServiceFromContainer(ModuleSettings::class);
         $moduleSettings->saveClientId($credentials['client_id']);
         $moduleSettings->saveClientSecret($credentials['client_secret']);
-
-        return [
-            'client_id' => $moduleSettings->getClientId(),
-            'client_secret' => $moduleSettings->getClientSecret()
-        ];
+        $moduleSettings->saveMerchantId($credentials['payer_id']);
     }
 
     public function getOnboardingClient(bool $isSandbox, bool $withCredentials = false): ApiOnboardingClient
