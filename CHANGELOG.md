@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007675](https://bugs.oxid-esales.com/view.php?id=7675): fix the possibility to finish order without redirect and login to Paypal
 - [0007676](https://bugs.oxid-esales.com/view.php?id=7676): If we have a corrupted generated_services.yaml and try to deactivate the module via the admin, we will display a more understandable error message about what happened.
 - introduce ActionHash to make the PayPal-Request-ID more unique
-- use PayPal-Client v3.0.12
+- use PayPal-Client v3.0.14
 - [0007588](https://bugs.oxid-esales.com/view.php?id=7588): Improve Error handling for Capture Order Requests (thanks to mount7)
 - remove Sofort and MyBank, Paymentmethods will soon no longer be accepted via PayPal
 - fix: Refund only with note to Buyer (required)
@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007760](https://bugs.oxid-esales.com/view.php?id=7760): fix Paypal return type and B2B Module
 - [0007763](https://bugs.oxid-esales.com/view.php?id=7763): fix Some data have received a strange name suffix
 - fix Remove SEPA payment method of it is not eligible, temporary solution
+- Change the onboarding process to "without return URL & return button"
 
 ### NEW
 
