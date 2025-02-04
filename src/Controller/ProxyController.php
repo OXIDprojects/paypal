@@ -457,7 +457,7 @@ class ProxyController extends FrontendController
             $paymentRequest = [
                 'total' => [
                     'label' => $moduleSettings->getShopName(),
-                    'amount' => (float)$basket->getBruttoSum(),
+                    'amount' => $basket->getPrice()->getBruttoPrice(),
                     'type' => 'final'
                 ],
                 'lineItems' => [
