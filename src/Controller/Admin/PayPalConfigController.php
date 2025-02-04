@@ -34,7 +34,8 @@ class PayPalConfigController extends AdminController
     /**
      * @var string Current class template name.
      */
-    protected $_sThisTemplate = 'oscpaypalconfig.tpl'; // phpcs:ignore PSR2.Classes.PropertyDeclaration
+    // phpcs:ignore PSR2.Classes.PropertyDeclaration
+    protected $_sThisTemplate = 'oscpaypalconfig.tpl';
 
     /**
      * @return string
@@ -110,17 +111,12 @@ class PayPalConfigController extends AdminController
         $localeCode = $lang->getLanguageAbbr() . '-' . $countryCode;
 
         $partnerLogoUrl = Registry::getConfig()->getOutUrl(null, true) . 'admin/img/loginlogo.png';
-        $returnToPartnerUrl = $config->getAdminUrlForJSCalls() .
-            'cl=oscpaypalconfig&fnc=returnFromSignup' .
-            '&isSandbox=' . ($isSandbox ? '1' : '0')
-        ;
 
         $params = [
             'partnerClientId' => $partnerClientId,
             'partnerId' => $partnerId,
             'partnerLogoUrl' => $partnerLogoUrl,
-            'returnToPartnerUrl' => $returnToPartnerUrl,
-            'product' => 'ppcp',
+            'product' => 'PPCP',
             'secondaryProducts' => 'payment_methods',
             'capabilities' => 'PAY_UPON_INVOICE',
             'integrationType' => 'FO',
@@ -163,10 +159,9 @@ class PayPalConfigController extends AdminController
     public function save()
     {
         $confArr = Registry::getRequest()->getRequestEscapedParameter('conf');
-        $shopId = Registry::getConfig()->getShopId();
 
         $confArr = $this->handleSpecialFields($confArr);
-        $this->saveConfig($confArr, $shopId);
+        $this->saveConfig($confArr);
         $this->checkEligibility();
         parent::save();
     }
@@ -175,9 +170,8 @@ class PayPalConfigController extends AdminController
      * Saves configuration values
      *
      * @param array $conf
-     * @param int $shopId
      */
-    protected function saveConfig(array $conf, int $shopId)
+    protected function saveConfig(array $conf)
     {
         foreach ($conf as $confName => $value) {
             $this->getServiceFromContainer(ModuleSettings::class)->save($confName, $value);
@@ -347,32 +341,12 @@ class PayPalConfigController extends AdminController
             $logger->error($exception->getMessage(), [$exception]);
         }
 
-        $result = [];
-        header('Content-Type: application/json; charset=UTF-8');
-        Registry::getUtils()->showMessageAndExit(json_encode($result));
-    }
-
-    public function returnFromSignup()
-    {
-        $config = new Config();
-        $request = Registry::getRequest();
-        if (
-            ('true' === (string)$request->getRequestParameter('permissionsGranted')) &&
-            ('true' === (string)$request->getRequestParameter('consentStatus'))
-        ) {
-            /** @var ModuleSettings $moduleSettings */
-            $moduleSettings = $this->getServiceFromContainer(ModuleSettings::class);
-            $isSandbox = (string)$request->getRequestParameter('isSandbox');
-            $isSandbox = $isSandbox === '1';
-            $moduleSettings->saveMerchantId($request->getRequestParameter('merchantIdInPayPal'), $isSandbox);
-        }
-
         $this->autoConfiguration();
         $this->registerWebhooks();
 
-        $url = $config->getAdminUrlForJSCalls() . 'cl=oscpaypalconfig';
-
-        Registry::getUtils()->redirect($url, false, 302);
+        $result = [];
+        header('Content-Type: application/json; charset=UTF-8');
+        Registry::getUtils()->showMessageAndExit(json_encode($result));
     }
 
     /**

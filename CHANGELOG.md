@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.3.12] - 2024-??-??
+## [1.3.12] - 2025-??-??
 
 - add possibility to ignore cached tokens. It helps e.g. for webhook registration
 - Update Client Version v1.0.12
+- Change the onboarding process to "without return URL & return button"
 
 ## [1.3.11] - 2024-09-12
 
