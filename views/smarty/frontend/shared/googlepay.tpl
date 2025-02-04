@@ -13,7 +13,7 @@
              data-use-google-pay-address="[{$oViewConf->usePayPalUseGooglePayAddress()}]"
              data-is-sandbox="[{$oPPconfig->isSandbox()}]"
              data-merchant-name="[{$oxcmp_shop->oxshops__oxname->value|oxescape}]"
-             data-total-price="[{$oxcmp_basket->getBruttoSum()}]"
+             data-total-price="[{$oxcmp_basket->getPriceForPayment()}]"
              data-currency="[{$currency->name}]"
              data-delivery-address-md5="[{$oView->getDeliveryAddressMD5()}]"
              data-language="[{$oView->getActiveLangAbbr()|lower}]"
