@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007763](https://bugs.oxid-esales.com/view.php?id=7763): fix Some data have received a strange name suffix
 - fix Remove SEPA payment method of it is not eligible, temporary solution
 - Change the onboarding process to "without return URL & return button"
+- [0007764](https://bugs.oxid-esales.com/view.php?id=7764): Fix TotalPrice for ApplePay
 
 ### NEW
 
