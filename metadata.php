@@ -61,7 +61,7 @@ $aModule = [
         'en' => 'Use of the online payment service from PayPal. Documentation: <a href="https://docs.oxid-esales.com/modules/paypal-checkout/en/latest/" target="_blank">PayPal Checkout</a>'
     ],
     'thumbnail' => 'img/paypal.png',
-    'version' => '3.3.5-rc.11',
+    'version' => '3.3.5',
     'author' => 'OXID eSales AG',
     'url' => 'https://www.oxid-esales.com',
     'email' => 'info@oxid-esales.com',
@@ -223,7 +223,7 @@ $aModule = [
         [
             'template' => 'page/checkout/thankyou.tpl',
             'block' => 'checkout_thankyou_info',
-            'file' => 'views/smarty/frontend/blocks/page/checkout/thankyou.tpl',
+            'file' => 'views/smarty/frontend/blocks/page/checkout/checkout_thankyou_info.tpl',
         ],
         [
             'template' => 'page/details/inc/productmain.tpl',
@@ -243,12 +243,12 @@ $aModule = [
         [
             'template' => 'page/search/search.tpl',
             'block' => 'search_header',
-            'file' => 'views/smarty/frontend/blocks/page/search/search.tpl'
+            'file' => 'views/smarty/frontend/blocks/page/search/search_header.tpl'
         ],
         [
             'template' => 'page/shop/start.tpl',
             'block' => 'start_welcome_text',
-            'file' => 'views/smarty/frontend/blocks/page/shop/start.tpl',
+            'file' => 'views/smarty/frontend/blocks/page/shop/start_welcome_text.tpl',
         ],
         [
             'template' => 'widget/minibasket/minibasket.tpl',
