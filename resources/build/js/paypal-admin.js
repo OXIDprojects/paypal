@@ -59,7 +59,7 @@ function callConfigControllerAutoConfigurationFromCallback(authCode, sharedId, i
     .then(
         function (response) {
             if (response.status === 200) {
-                window.location.href = window.location.pathname + window.location.search;
+                window.location.reload();
             }
         }
     )
