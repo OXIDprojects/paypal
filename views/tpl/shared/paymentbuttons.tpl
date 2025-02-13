@@ -65,6 +65,12 @@
             });
         [{else}]
             button = paypal.Buttons({
+                style: {
+                    shape: "rect",
+                    layout: "vertical",
+                    color: "gold",
+                    label: "pay",
+                },
                 [{if $oViewConf->getCountryRestrictionForPayPalExpress()}]
                 onShippingChange: function (data, actions) {
                     if (!countryRestriction.includes(data.shipping_address.country_code)) {
