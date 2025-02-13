@@ -15,6 +15,7 @@ use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidSolutionCatalysts\PayPal\Traits\ServiceContainer;
 use OxidSolutionCatalysts\PayPal\Service\ModuleSettings;
 use OxidSolutionCatalysts\PayPalApi\Client;
+use RuntimeException;
 
 /**
  * Class Config
@@ -310,15 +311,30 @@ class Config
     }
 
     /**
+     * Return path to cache dir
+     * Write to a extra folder in the tmp folder to not be deleted when module config changes
+     * (tmp dir is cleared when module config changes in oxid 7)
+     *
+     * @return string
+     */
+    public function getCacheDir(): string
+    {
+        $dir = Registry::getConfig()->getConfigParam('sCompileDir')
+            . DIRECTORY_SEPARATOR . 'osc_paypal' . DIRECTORY_SEPARATOR;
+        if ((file_exists($dir) === false) && !mkdir($dir) && !is_dir($dir)) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $dir));
+        }
+        return $dir;
+    }
+
+    /**
      * get the full File Name of the Token Cache
      *
      * @return string
      */
     public function getTokenCacheFileName(): string
     {
-        $config = Registry::getConfig();
-        $shopId = $config->getActiveShop()->getId();
-        return $config->getConfigParam('sCompileDir') . 'paypaltoken_' . $shopId . '.txt';
+        return $this->getCacheDir() . 'paypaltoken_' . Registry::getConfig()->getActiveShop()->getId() . '.txt';
     }
 
     /**
