@@ -21,7 +21,7 @@
         [{/if}]
     </div>
     <div id="overlay"><div class="loader"></div></div>
-    <form id="configForm" name="configForm" action="[{$oViewConf->getSslSelfLink()}]" method="post" autocomplete="off">
+    <form id="configForm" name="configForm" action="[{$oViewConf->getSslSelfLink()|replace:"&amp;":"&"}]" method="post" autocomplete="off">
         [{$oViewConf->getHiddenSid()}]
         <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">
         <input type="hidden" name="fnc" value="save">
@@ -52,19 +52,17 @@
                         <label>[{oxmultilang ident="OSC_PAYPAL_CREDENTIALS"}]</label>
 
                         <p class="help-block text-danger">[{oxmultilang ident="HELP_OSC_PAYPAL_CREDENTIALS_PART1"}]</p>
+                        <p class="help-block text-danger">[{oxmultilang ident="HELP_OSC_PAYPAL_CREDENTIALS_PART2"}]</p>
 
-                        [{if !$config->getLiveClientId() && !$config->getLiveClientSecret() && !$config->getLiveWebhookId()}]
-                            <p class="live help-block text-danger">[{oxmultilang ident="HELP_OSC_PAYPAL_CREDENTIALS_PART2"}]</p>
-                            <p class="live"><a target="_blank"
-                                  class="popuplink2"
-                                  href="[{$oView->getLiveSignUpMerchantIntegrationLink()}]"
-                                  id="paypalonboardinglive"
-                                  data-paypal-onboard-complete="onboardedCallbackLive"
-                                  data-paypal-button="PPLtBlue">
-                                    [{oxmultilang ident="OSC_PAYPAL_LIVE_BUTTON_CREDENTIALS"}]
-                               </a>
-                            </p>
-                        [{/if}]
+                        <p class="live"><a target="_blank"
+                              class="popuplink2"
+                              href="[{$oView->getLiveSignUpMerchantIntegrationLink()}]"
+                              id="paypalonboardinglive"
+                              data-paypal-onboard-complete="onboardedCallbackLive"
+                              data-paypal-button="PPLtBlue">
+                                [{oxmultilang ident="OSC_PAYPAL_LIVE_BUTTON_CREDENTIALS"}]
+                           </a>
+                        </p>
 
                         <h3 class="live">[{oxmultilang ident="OSC_PAYPAL_LIVE_CREDENTIALS"}]</h3>
 
@@ -108,18 +106,15 @@
                             </div>
                         </div>
 
-                        [{if !$config->getSandboxClientId() && !$config->getSandboxClientSecret() && !$config->getSandboxWebhookId()}]
-                            <p class="sandbox help-block text-danger">[{oxmultilang ident="HELP_OSC_PAYPAL_CREDENTIALS_PART2"}]</p>
-                            <p class="sandbox"><a target="_blank"
-                                  class="popuplink"
-                                  href="[{$oView->getSandboxSignUpMerchantIntegrationLink()}]"
-                                  id="paypalonboardingsandbox"
-                                  data-paypal-onboard-complete="onboardedCallbackSandbox"
-                                  data-paypal-button="PPLtBlue">
-                                    [{oxmultilang ident="OSC_PAYPAL_SANDBOX_BUTTON_CREDENTIALS"}]
-                                </a>
-                            </p>
-                        [{/if}]
+                        <p class="sandbox"><a target="_blank"
+                              class="popuplink"
+                              href="[{$oView->getSandboxSignUpMerchantIntegrationLink()}]"
+                              id="paypalonboardingsandbox"
+                              data-paypal-onboard-complete="onboardedCallbackSandbox"
+                              data-paypal-button="PPLtBlue">
+                                [{oxmultilang ident="OSC_PAYPAL_SANDBOX_BUTTON_CREDENTIALS"}]
+                            </a>
+                        </p>
 
                         <h3 class="sandbox">[{oxmultilang ident="OSC_PAYPAL_SANDBOX_CREDENTIALS"}]</h3>
 
@@ -473,14 +468,10 @@
                 <div id="collapse8" class="collapse" aria-labelledby="heading8" data-parent="#accordion">
                     <div class="card-body">
                         <div class="form-group">
+                            <label for="locales">[{oxmultilang ident="OSC_PAYPAL_LOCALES"}]</label>
                             <div class="controls">
-                                <div class="form-group">
-                                    <label for="locales">[{oxmultilang ident="OSC_PAYPAL_LOCALES"}]</label>
-                                    <div class="controls">
-                                        <input type="text" class="form-control" id="locales" name="conf[oscPayPalLocales]" value="[{$config->getSupportedLocalesCommaSeparated()}]" />
-                                        <span class="help-block">[{oxmultilang ident="HELP_OSC_PAYPAL_LOCALES"}]</span>
-                                    </div>
-                                </div>
+                                <input type="text" class="form-control" id="locales" name="conf[oscPayPalLocales]" value="[{$config->getSupportedLocalesCommaSeparated()}]" />
+                                <span class="help-block">[{oxmultilang ident="HELP_OSC_PAYPAL_LOCALES"}]</span>
                             </div>
                         </div>
                     </div>
