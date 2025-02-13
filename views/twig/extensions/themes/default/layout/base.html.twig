@@ -17,7 +17,7 @@
         {% set sCountryRestriction = oViewConf.getCountryRestrictionForPayPalExpress() %}
         {% if sCountryRestriction %}
             <script>
-                const countryRestriction = [{{ sCountryRestriction }}];
+                const countryRestriction = [{{ sCountryRestriction|raw }}];
             </script>
         {% endif %}
         {% if submitCart %}
