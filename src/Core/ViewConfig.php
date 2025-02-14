@@ -8,6 +8,7 @@
 namespace OxidSolutionCatalysts\PayPal\Core;
 
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Theme;
 use OxidSolutionCatalysts\PayPal\Core\Api\IdentityService;
@@ -315,18 +316,16 @@ class ViewConfig extends ViewConfig_parent
 
     public function getDataClientToken(): string
     {
-        $result = '';
-
         try {
             /** @var IdentityService $identityService */
             $identityService = Registry::get(ServiceFactory::class)->getIdentityService();
 
-            $response = $identityService->requestClientToken();
-            $result = $response['client_token'] ?? '';
-        } catch (Exception $exception) {
+            $result = $identityService->requestClientToken();
+        } catch (GuzzleException|Exception $exception) {
             /** @var Logger $logger */
             $logger = $this->getServiceFromContainer(Logger::class);
             $logger->log('error', $exception->getMessage(), [$exception]);
+            $result = '';
         }
 
         return $result;
