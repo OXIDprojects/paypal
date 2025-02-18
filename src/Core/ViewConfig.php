@@ -320,19 +320,18 @@ class ViewConfig extends ViewConfig_parent
 
     public function getDataClientToken(): string
     {
-        $result = '';
 
         try {
             /** @var IdentityService $identityService */
             $identityService = Registry::get(ServiceFactory::class)->getIdentityService();
 
-            $response = $identityService->requestClientToken();
-            $result = $response['client_token'] ?? '';
-        } catch (Exception $exception) {
             /** @var Logger $logger */
+            $result = $identityService->requestClientToken();
+        } catch (GuzzleException|Exception $exception) {
             $logger = $this->getServiceFromContainer(Logger::class);
             $logger->log('error', $exception->getMessage(), [$exception]);
         }
+            $result = '';
 
         return $result;
     }

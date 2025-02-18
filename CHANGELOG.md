@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.4.1] - 2025-??-??
+
+- [0007769](https://bugs.oxid-esales.com/view.php?id=7769): Performance: Cache the Data-Client-Token for 24h & load SDK only if necessary
+- use PayPal-Client v3.0.15
+- set connect-timeout for 5 Seconds and request-timeout for 30 seconds
+
 ## [3.4.0] - 2025-02-06
 
 ### FIX
