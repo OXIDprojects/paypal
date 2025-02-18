@@ -7,8 +7,12 @@
 
 namespace OxidSolutionCatalysts\PayPal\Core;
 
+use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidSolutionCatalysts\PayPal\Core\Api\IdentityService;
 use OxidSolutionCatalysts\PayPal\Service\LanguageLocaleMapper;
+use OxidSolutionCatalysts\PayPal\Service\Logger;
 use OxidSolutionCatalysts\PayPal\Traits\ServiceContainer;
 use OxidSolutionCatalysts\PayPal\Service\ModuleSettings;
 
@@ -250,13 +254,17 @@ class ViewConfig extends ViewConfig_parent
 
     public function getDataClientToken(): string
     {
+        try {
+            /** @var IdentityService $identityService */
+            $identityService = Registry::get(ServiceFactory::class)->getIdentityService();
 
-        /** @var \OxidSolutionCatalysts\PayPal\Core\Api\IdentityService $identityService */
-        $identityService = Registry::get(ServiceFactory::class)->getIdentityService();
-
-        $response = $identityService->requestClientToken();
-
-        return $response['client_token'] ?? '';
+            $result = $identityService->requestClientToken();
+        } catch (GuzzleException $exception) {
+            $result = '';
+        } catch (Exception $exception) {
+            $result = '';
+        }
+        return $result;
     }
 
     /**
