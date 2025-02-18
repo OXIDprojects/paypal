@@ -1,5 +1,6 @@
 [{block name="oscpaypal_applepay"}]
     [{oxhasrights ident="PAYWITHAPPLEPAY"}]
+        [{$oViewConf->setSDKIsNecessary()}]
         [{assign var="sToken" value=$oViewConf->getSessionChallengeToken()}]
         [{assign var="sSelfLink" value=$oViewConf->getSslSelfLink()|replace:"&amp;":"&"}]
         [{assign var="config" value=$oViewConf->getPayPalCheckoutConfig()}]

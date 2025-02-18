@@ -1,4 +1,5 @@
 [{if $oViewConf->enablePayPalBanners() && $oViewConf->getPayPalClientId()}]
+    [{$oViewConf->setSDKIsNecessary()}]
     [{if !isset($size) }]
         [{assign var="size" value="20x1"}]
     [{/if}]

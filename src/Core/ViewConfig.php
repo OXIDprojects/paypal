@@ -8,6 +8,7 @@
 namespace OxidSolutionCatalysts\PayPal\Core;
 
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Theme;
 use OxidSolutionCatalysts\PayPal\Core\Api\IdentityService;
@@ -35,6 +36,12 @@ class ViewConfig extends ViewConfig_parent
      * @param boolean
      */
     protected $isWaveCompatibleTheme = null;
+
+    /**
+     * is this SDK necessary?
+     * @param boolean
+     */
+    protected $isSDKNecessary = false;
 
     /**
      * @return bool
@@ -136,6 +143,22 @@ class ViewConfig extends ViewConfig_parent
     public function getCheckoutOrderId(): ?string
     {
         return PayPalSession::getCheckoutOrderId();
+    }
+
+    /**
+     * @return void
+     */
+    public function setSDKIsNecessary()
+    {
+        $this->isSDKNecessary = true;
+    }
+
+    /**
+     * @return void
+     */
+    public function isSDKNecessary()
+    {
+        return $this->isSDKNecessary;
     }
 
     /**
@@ -320,18 +343,17 @@ class ViewConfig extends ViewConfig_parent
 
     public function getDataClientToken(): string
     {
-
         try {
             /** @var IdentityService $identityService */
             $identityService = Registry::get(ServiceFactory::class)->getIdentityService();
 
-            /** @var Logger $logger */
             $result = $identityService->requestClientToken();
         } catch (GuzzleException|Exception $exception) {
+            /** @var Logger $logger */
             $logger = $this->getServiceFromContainer(Logger::class);
             $logger->log('error', $exception->getMessage(), [$exception]);
-        }
             $result = '';
+        }
 
         return $result;
     }
