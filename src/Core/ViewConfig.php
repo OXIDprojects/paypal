@@ -14,7 +14,6 @@ use OxidEsales\Eshop\Core\Theme;
 use OxidSolutionCatalysts\PayPal\Core\Api\IdentityService;
 use OxidSolutionCatalysts\PayPal\Service\LanguageLocaleMapper;
 use OxidSolutionCatalysts\PayPal\Service\Logger;
-use OxidSolutionCatalysts\PayPal\Service\Payment as PaymentService;
 use OxidSolutionCatalysts\PayPal\Traits\ServiceContainer;
 use OxidSolutionCatalysts\PayPal\Service\ModuleSettings;
 
@@ -27,19 +26,19 @@ class ViewConfig extends ViewConfig_parent
 
     /**
      * is this a "Flow"-Theme Compatible Theme?
-     * @param boolean
+     * @var boolean
      */
     protected $isFlowCompatibleTheme = null;
 
     /**
      * is this a "Wave"-Theme Compatible Theme?
-     * @param boolean
+     * @var boolean
      */
     protected $isWaveCompatibleTheme = null;
 
     /**
      * is this SDK necessary?
-     * @param boolean
+     * @var boolean
      */
     protected $isSDKNecessary = false;
 
@@ -149,9 +148,9 @@ class ViewConfig extends ViewConfig_parent
     }
 
     /**
-     * @return void
+     * @return bool
      */
-    public function isSDKNecessary()
+    public function isSDKNecessary(): bool
     {
         return $this->isSDKNecessary;
     }
