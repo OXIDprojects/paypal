@@ -2,7 +2,7 @@
 
 {% block base_js %}
     {{ parent() }}
-    {% if oViewConf.isPayPalCheckoutActive() %}
+    {% if oViewConf.isPayPalCheckoutActive() and oViewConf.isSDKNecessary() %}
         {% set className = oViewConf.getTopActiveClassName() %}
         {% set sFileMTime = oViewConf.getModulePath('osc_paypal', 'js/paypal-frontend.min.js') %}
         <script src="{{ oViewConf.getModuleUrl('osc_paypal','js/paypal-frontend.min.js') }}"></script>
@@ -30,7 +30,7 @@
 
 {% block base_style %}
     {{ parent() }}
-    {% if oViewConf.isPayPalCheckoutActive() %}
+    {% if oViewConf.isPayPalCheckoutActive() and oViewConf.isSDKNecessary() %}
     {{ style({ include: oViewConf.getModuleUrl('osc_paypal', 'css/paypal.min.css') }) }}
     {% endif %}
 
