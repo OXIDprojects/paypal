@@ -27,21 +27,21 @@ class ViewConfig extends ViewConfig_parent
 
     /**
      * is this a "Flow"-Theme Compatible Theme?
-     * @param boolean
+     * @var boolean
      */
-    protected $isFlowCompatibleTheme = null;
+    protected ?bool $isFlowCompatibleTheme = null;
 
     /**
      * is this a "Wave"-Theme Compatible Theme?
-     * @param boolean
+     * @var boolean
      */
-    protected $isWaveCompatibleTheme = null;
+    protected ?bool $isWaveCompatibleTheme = null;
 
     /**
      * is this SDK necessary?
-     * @param boolean
+     * @var boolean
      */
-    protected $isSDKNecessary = false;
+    protected bool $isSDKNecessary = false;
 
     /**
      * @return bool
@@ -148,15 +148,15 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return void
      */
-    public function setSDKIsNecessary()
+    public function setSDKIsNecessary(): void
     {
         $this->isSDKNecessary = true;
     }
 
     /**
-     * @return void
+     * @return bool
      */
-    public function isSDKNecessary()
+    public function isSDKNecessary(): bool
     {
         return $this->isSDKNecessary;
     }
