@@ -1,6 +1,6 @@
 [{assign var="payment" value=$oView->getPayment()}]
-[{$oViewConf->setSDKIsNecessary()}]
 [{if "oscpaypal_acdc" == $payment->getId() || "oscpaypal_pui" == $payment->getId() || $vaultedPaymentDescription}]
+    [{$oViewConf->setSDKIsNecessary()}]
     [{if $oViewConf->isFlowCompatibleTheme()}]
         [{include file="modules/osc/paypal/shipping_and_payment_flow.tpl"}]
     [{else}]
