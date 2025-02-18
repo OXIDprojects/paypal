@@ -1,3 +1,4 @@
+[{$oViewConf->setSDKIsNecessary()}]
 [{if $oViewConf->isFlowCompatibleTheme()}]
     [{include file='modules/osc/paypal/vaultedpaymentsources_flow.tpl'}]
 [{else}]

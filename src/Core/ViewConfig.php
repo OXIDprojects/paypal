@@ -38,6 +38,12 @@ class ViewConfig extends ViewConfig_parent
     protected $isWaveCompatibleTheme = null;
 
     /**
+     * is this SDK necessary?
+     * @param boolean
+     */
+    protected $isSDKNecessary = false;
+
+    /**
      * @return bool
      */
     public function isPayPalCheckoutActive(): bool
@@ -132,6 +138,22 @@ class ViewConfig extends ViewConfig_parent
     public function getCheckoutOrderId(): ?string
     {
         return PayPalSession::getCheckoutOrderId();
+    }
+
+    /**
+     * @return void
+     */
+    public function setSDKIsNecessary()
+    {
+        $this->isSDKNecessary = true;
+    }
+
+    /**
+     * @return void
+     */
+    public function isSDKNecessary()
+    {
+        return $this->isSDKNecessary;
     }
 
     /**

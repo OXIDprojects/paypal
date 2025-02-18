@@ -1,5 +1,6 @@
 [{block name="oscpaypal_googlepay"}]
     [{oxhasrights ident="PAYWITHGOOGLEPAY"}]
+        [{$oViewConf->setSDKIsNecessary()}]
         [{assign var="sToken" value=$oViewConf->getSessionChallengeToken()}]
         [{assign var="sSelfLink" value=$oViewConf->getSslSelfLink()|replace:"&amp;":"&"}]
         [{assign var="oPPconfig" value=$oViewConf->getPayPalCheckoutConfig()}]
