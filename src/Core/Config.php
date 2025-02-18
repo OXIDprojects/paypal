@@ -397,6 +397,17 @@ class Config
         return $this->getCacheDir() . 'paypaltoken_' . Registry::getConfig()->getActiveShop()->getId() . '.txt';
     }
 
+
+    /**
+     * get the full File Name of the Data-Client-Token Cache
+     *
+     * @return string
+     */
+    public function getDataClientTokenCacheFileName(): string
+    {
+        return $this->getCacheDir() . 'dataclienttoken_' . Registry::getConfig()->getActiveShop()->getId() . '.txt';
+    }
+
     /**
      * Get a Admin URL with all necessary Admin-params
      *

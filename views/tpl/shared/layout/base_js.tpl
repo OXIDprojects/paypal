@@ -1,5 +1,4 @@
-[{if $oViewConf->isPayPalCheckoutActive()}]
-    [{assign var="className" value=$oViewConf->getTopActiveClassName()}]
+[{if $oViewConf->isPayPalCheckoutActive() && $oViewConf->isSDKNecessary()}]
     [{assign var="sFileMTime" value=$oViewConf->getModulePath('osc_paypal','out/src/js/paypal-frontend.min.js')|filemtime}]
     <script src="[{$oViewConf->getModuleUrl('osc_paypal','out/src/js/paypal-frontend.min.js')|cat:"?"|cat:$sFileMTime}]"></script>
     <script src="[{$oViewConf->getPayPalJsSdkUrl()}]"

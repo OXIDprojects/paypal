@@ -8,12 +8,12 @@
 namespace OxidSolutionCatalysts\PayPal\Core;
 
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Theme;
 use OxidSolutionCatalysts\PayPal\Core\Api\IdentityService;
 use OxidSolutionCatalysts\PayPal\Service\LanguageLocaleMapper;
 use OxidSolutionCatalysts\PayPal\Service\Logger;
-use OxidSolutionCatalysts\PayPal\Service\Payment as PaymentService;
 use OxidSolutionCatalysts\PayPal\Traits\ServiceContainer;
 use OxidSolutionCatalysts\PayPal\Service\ModuleSettings;
 
@@ -26,15 +26,21 @@ class ViewConfig extends ViewConfig_parent
 
     /**
      * is this a "Flow"-Theme Compatible Theme?
-     * @param boolean
+     * @var boolean
      */
     protected $isFlowCompatibleTheme = null;
 
     /**
      * is this a "Wave"-Theme Compatible Theme?
-     * @param boolean
+     * @var boolean
      */
     protected $isWaveCompatibleTheme = null;
+
+    /**
+     * is this SDK necessary?
+     * @var boolean
+     */
+    protected $isSDKNecessary = false;
 
     /**
      * @return bool
@@ -131,6 +137,22 @@ class ViewConfig extends ViewConfig_parent
     public function getCheckoutOrderId(): ?string
     {
         return PayPalSession::getCheckoutOrderId();
+    }
+
+    /**
+     * @return void
+     */
+    public function setSDKIsNecessary()
+    {
+        $this->isSDKNecessary = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSDKNecessary(): bool
+    {
+        return $this->isSDKNecessary;
     }
 
     /**
@@ -315,18 +337,16 @@ class ViewConfig extends ViewConfig_parent
 
     public function getDataClientToken(): string
     {
-        $result = '';
-
         try {
             /** @var IdentityService $identityService */
             $identityService = Registry::get(ServiceFactory::class)->getIdentityService();
 
-            $response = $identityService->requestClientToken();
-            $result = $response['client_token'] ?? '';
-        } catch (Exception $exception) {
+            $result = $identityService->requestClientToken();
+        } catch (GuzzleException|Exception $exception) {
             /** @var Logger $logger */
             $logger = $this->getServiceFromContainer(Logger::class);
             $logger->log('error', $exception->getMessage(), [$exception]);
+            $result = '';
         }
 
         return $result;
