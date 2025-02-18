@@ -7,8 +7,12 @@
 
 namespace OxidSolutionCatalysts\PayPal\Core;
 
+use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidSolutionCatalysts\PayPal\Core\Api\IdentityService;
 use OxidSolutionCatalysts\PayPal\Service\LanguageLocaleMapper;
+use OxidSolutionCatalysts\PayPal\Service\Logger;
 use OxidSolutionCatalysts\PayPal\Traits\ServiceContainer;
 use OxidSolutionCatalysts\PayPal\Service\ModuleSettings;
 
@@ -21,15 +25,21 @@ class ViewConfig extends ViewConfig_parent
 
     /**
      * is this a "Flow"-Theme Compatible Theme?
-     * @param boolean
+     * @var boolean
      */
     protected $isFlowCompatibleTheme = null;
 
     /**
      * is this a "Wave"-Theme Compatible Theme?
-     * @param boolean
+     * @var boolean
      */
     protected $isWaveCompatibleTheme = null;
+
+    /**
+     * is this SDK necessary?
+     * @var boolean
+     */
+    protected $isSDKNecessary = false;
 
     /**
      * @return bool
@@ -120,6 +130,22 @@ class ViewConfig extends ViewConfig_parent
     }
 
     /**
+     * @return void
+     */
+    public function setSDKIsNecessary()
+    {
+        $this->isSDKNecessary = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSDKNecessary()
+    {
+        return $this->isSDKNecessary;
+    }
+
+    /**
      * @return string
      */
     public function getPayPalPuiFNParams(): string
@@ -154,12 +180,30 @@ class ViewConfig extends ViewConfig_parent
     {
         $config = Registry::getConfig();
         $lang = Registry::getLang();
+        $params = [];
+        $enableFunding = [];
+        $disableFunding = [
+            'bancontact',
+            'blik',
+            'eps',
+            'giropay',
+            'ideal',
+            'mercadopago',
+            'p24',
+            'venmo',
+        ];
+        $components = [
+            'buttons',
+        ];
+
+        if ($this->getTopActiveClassName() !== 'payment') {
+            $disableFunding[] = 'sepa';
+        }
 
         $localeCode = $this->getServiceFromContainer(LanguageLocaleMapper::class)
             ->mapLanguageToLocale($lang->getLanguageAbbr());
 
         $moduleSettings = $this->getServiceFromContainer(ModuleSettings::class);
-        $params = [];
 
         $params['client-id'] = $this->getPayPalClientId();
         $params['integration-date'] = Constants::PAYPAL_INTEGRATION_DATE;
@@ -170,79 +214,32 @@ class ViewConfig extends ViewConfig_parent
             $params['currency'] = strtoupper($currency->name);
         }
 
-        $params['components'] = 'buttons';
-        // Available components: enable messages+buttons for PDP
+        $params['merchant-id'] = $moduleSettings->getMerchantId();
+
         if ($this->isPayPalBannerActive()) {
-            $params['components'] .= ',messages';
+            $components[] = 'messages';
         }
 
         if ($moduleSettings->showPayPalPayLaterButton()) {
-            $params['enable-funding'] = 'paylater';
+            $enableFunding[] = 'paylater';
         }
-
-        $params['disable-funding'] = 'sepa,bancontact,blik,eps,giropay,ideal,mercadopago,p24,venmo';
 
         if ($moduleSettings->isAcdcEligibility()) {
-            $params['disable-funding'] .= ',card';
+            $components[] = 'hosted-fields';
         } else {
-            if (isset($params['enable-funding'])) {
-                $params['enable-funding'] .= ',card';
-            } else {
-                $params['enable-funding'] = 'card';
-            }
-        }
-        $params['locale'] = $localeCode;
-
-        return Constants::PAYPAL_JS_SDK_URL . '?' . http_build_query($params);
-    }
-
-    /**
-     * Gets PayPal JS SDK url for ACDC
-     *
-     * @return string
-     */
-    public function getPayPalJsSdkUrlForACDC(): string
-    {
-        return $this->getBasePayPalJsSdkUrl('hosted-fields');
-    }
-
-    /**
-     * Gets PayPal JS SDK url for Button Payments like SEPA and CreditCardFallback
-     *
-     * @return string
-     */
-    public function getPayPalJsSdkUrlForButtonPayments(): string
-    {
-        return $this->getBasePayPalJsSdkUrl('funding-eligibility', true);
-    }
-
-    protected function getBasePayPalJsSdkUrl($type = '', $continueFlow = false): string
-    {
-        $config = Registry::getConfig();
-        $lang = Registry::getLang();
-
-        $localeCode = $this->getServiceFromContainer(LanguageLocaleMapper::class)
-            ->mapLanguageToLocale($lang->getLanguageAbbr());
-
-        $params = [];
-
-        $params['client-id'] = $this->getPayPalClientId();
-        $params['integration-date'] = Constants::PAYPAL_INTEGRATION_DATE;
-
-        if ($currency = $config->getActShopCurrencyObject()) {
-            $params['currency'] = strtoupper($currency->name);
+            $enableFunding[] = 'card';
         }
 
-        if ($continueFlow) {
-            $params['intent'] = strtolower(Constants::PAYPAL_ORDER_INTENT_CAPTURE);
-            $params['commit'] = 'false';
+        if ($components) {
+            $params['components'] = implode(',', $components);
+        }
+        if ($enableFunding) {
+            $params['enable-funding'] = implode(',', $enableFunding);
+        }
+        if ($disableFunding) {
+            $params['disable-funding'] = implode(',', $disableFunding);
         }
 
-        $params['components'] = 'buttons,' . $type;
-
-        if ($this->isPayPalBannerActive()) {
-            $params['components'] .= ',messages';
-        }
         $params['locale'] = $localeCode;
 
         return Constants::PAYPAL_JS_SDK_URL . '?' . http_build_query($params);
@@ -250,13 +247,17 @@ class ViewConfig extends ViewConfig_parent
 
     public function getDataClientToken(): string
     {
+        try {
+            /** @var IdentityService $identityService */
+            $identityService = Registry::get(ServiceFactory::class)->getIdentityService();
 
-        /** @var \OxidSolutionCatalysts\PayPal\Core\Api\IdentityService $identityService */
-        $identityService = Registry::get(ServiceFactory::class)->getIdentityService();
-
-        $response = $identityService->requestClientToken();
-
-        return $response['client_token'] ?? '';
+            $result = $identityService->requestClientToken();
+        } catch (GuzzleException $exception) {
+            $result = '';
+        } catch (Exception $exception) {
+            $result = '';
+        }
+        return $result;
     }
 
     /**

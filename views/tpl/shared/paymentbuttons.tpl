@@ -1,4 +1,5 @@
 [{block name="oscpaypal_paymentbuttons"}]
+    [{$oViewConf->setSDKIsNecessary()}]
     <div id="[{$buttonId}]" class="paypal-button-container [{$buttonClass}]"></div>
     [{if $phpStorm}]<script>[{/if}]
     [{capture assign="paypal_init"}]

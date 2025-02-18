@@ -5,13 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.3.13] - 2025-02-??
- 
+
+- [0007769](https://bugs.oxid-esales.com/view.php?id=7769): Performance: Cache the Data-Client-Token for 24h & load SDK only if necessary
+- use PayPal-Client v3.0.14
+- set connect-timeout for 5 Seconds and request-timeout for 30 seconds
 - fix Error during save Eligibility
 
 ## [1.3.12] - 2025-02-06
 
 - add possibility to ignore cached tokens. It helps e.g. for webhook registration
-- Update Client Version v1.0.12
+- Update Client Version v1.0.13
 - Change the onboarding process to "without return URL & return button"
 
 ## [1.3.11] - 2024-09-12
