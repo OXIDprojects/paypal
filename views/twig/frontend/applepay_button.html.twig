@@ -1,5 +1,6 @@
 {% block oscpaypal_applepay %}
     {% hasrights { ident: "PAYWITHAPPLEPAY" } %}
+        {{ oViewConf.setSDKIsNecessary() }}
         {% set sToken = oViewConf.getSessionChallengeToken() %}
         {% set sSelfLink = oViewConf.getSslSelfLink()|replace({"&amp;": "&"}) %}
         {% set config = oViewConf.getPayPalCheckoutConfig() %}
