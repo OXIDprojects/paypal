@@ -24,6 +24,8 @@ class PayPalRequestAmountFactory
     {
         $netMode = $basket->isCalculationModeNetto();
         $currency = $basket->getBasketCurrency();
+        //only two decimal place precision is supported in PayPal
+        $currency->decimal = 2;
 
         //Discount
         $discount = $basket->getPayPalCheckoutDiscount();
@@ -56,7 +58,7 @@ class PayPalRequestAmountFactory
 
         //Total amount
         $amount = new AmountWithBreakdown();
-        $amount->value = $brutBasketTotal;
+        $amount->value = number_format($brutBasketTotal, $currency->decimal, $currency->dec, $currency->thousand);
         $amount->currency_code = $total->currency_code;
 
         //Cost breakdown

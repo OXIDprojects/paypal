@@ -307,6 +307,8 @@ class OrderRequestFactory
         $basket = $this->basket;
         $itemCategory = $this->getItemCategoryByBasketContent();
         $currency = $basket->getBasketCurrency();
+        //only two decimal place precision is supported in PayPal
+        $currency->decimal = 2;
         $language = Registry::getLang();
         $items = [];
 
@@ -323,8 +325,13 @@ class OrderRequestFactory
 
             // no zero price articles in the list
             if ($itemUnitPrice && $itemUnitPrice->getBruttoPrice() > 0) {
+                $bruttoPrice = number_format($itemUnitPrice->getBruttoPrice(),
+                    $currency->decimal,
+                    $currency->dec,
+                    $currency->thousand
+                );
                 $item->unit_amount = PriceToMoney::convert(
-                    $itemUnitPrice->getBruttoPrice(),
+                    $bruttoPrice,
                     $currency
                 );
                 // tax - we use 0% and calculate with brutto to avoid rounding errors
